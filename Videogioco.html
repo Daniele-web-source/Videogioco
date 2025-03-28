@@ -43,8 +43,16 @@
     </style>
 </head>
 <body>
-    <h1>Benvenuto nel Gioco di Halloween!</h1>
-    <button id="startButton">Inizia il Gioco</button>
+    <!-- Introduzione -->
+    <div id="intro">
+        <h1>La casa nel bosco...</h1>
+        <p>È la notte di Halloween e tu, insieme al tuo partner, siete stati invitati dai vostri amici a trascorrere la notte in una vecchia casa nel bosco. Si dice che un tempo appartenesse a una famiglia scomparsa nel nulla, e che nessuno vi abbia più abitato da allora.</p>
+        <p>Al vostro arrivo, la casa sembra più inquietante del previsto: le finestre sono oscurate dalla polvere, la porta scricchiola sinistramente e un vento gelido soffia tra gli alberi. I vostri amici vi accolgono con risate e racconti dell'orrore, ma presto qualcosa sembra fuori posto...</p>
+        <p>A mezzanotte esatta, la porta si chiude da sola con un tonfo. Le luci tremolano e una voce sussurra nel buio: "Vuoi giocare?"</p>
+        <button id="startButton">Inizia il Gioco</button>
+    </div>
+
+    <!-- Area del gioco (nascosta inizialmente) -->
     <div id="gameArea" style="display:none;"></div>
 
     <!-- Elemento audio per il suono di sottofondo senza controls e con autoplay -->
@@ -58,6 +66,7 @@
         const gameArea = document.getElementById('gameArea');
         const introSound = document.getElementById('introSound');
         const body = document.body; // Seleziona il body per modificare lo sfondo
+        const introDiv = document.getElementById('intro'); // Introduzione
 
         // Funzione per iniziare il gioco
         function inizioGioco() {
@@ -65,14 +74,24 @@
                 console.error("Errore nella riproduzione dell'audio:", error);
                 alert("La riproduzione dell'audio è stata bloccata dal browser. Clicca per riprodurre il suono.");
             });
-            gameArea.innerHTML = '';
+            // Nascondi l'introduzione
+            introDiv.style.display = 'none';
+
+            // Mostra l'area di gioco
             gameArea.style.display = 'block';
-            mostraMessaggio("Ciao,<br>benvenuto/a nel mio primo gioco.<br><br>La regola è solo una, per poter proseguire bisogna rispondere 'si' o 'no' ad ogni domanda.<br><br>L'obiettivo è riuscire a sopravvivere alla notte di Halloween!<br><br>Tu e la vostra ragazza/o, siete stati invitati a passare la notte di Halloween insieme ai vostri amici in una casa nel bosco di un vostro amico.<br><br>Partecipate?", primaScelta);
+            mostraMessaggio("Ciao,<br>benvenuto/a nel mio primo gioco.<br><br>La regola è solo una, per poter proseguire bisogna rispondere 'si' o 'no' ad ogni domanda.<br><br>L'obiettivo è riuscire a sopravvivere alla notte di Halloween!<br><br>Tu e la vostra ragazza/o, siete stati invitati a passare la notte di Halloween insieme ai vostri amici in una casa nel bosco.<br><br>Partecipate?", primaScelta);
         }
 
         // Funzione per mostrare messaggi e domande, con possibilità di cambiare lo sfondo temporaneamente
         function mostraMessaggio(messaggio, callback, sfondoTemporaneo = null, sfondoGameOver = null) {
-            let contenuto = `<p>${messaggio}</p><input type="text" id="risposta" placeholder="Rispondi qui..."><button id="submitButton">Invia</button>`;
+            let contenuto = `<p>${messaggio}</p>`;
+
+            // Aggiungi il pulsante "Ricomincia" solo in caso di game over
+            if (sfondoGameOver) {
+                contenuto += `<button id="restartButton">Ricomincia</button>`;
+            } else {
+                contenuto += `<input type="text" id="risposta" placeholder="Rispondi qui..."><button id="submitButton">Invia</button>`;
+            }
 
             gameArea.innerHTML = contenuto;
 
@@ -89,6 +108,7 @@
 
             const rispostaInput = document.getElementById('risposta');
             const submitButton = document.getElementById('submitButton');
+            const restartButton = document.getElementById('restartButton');
 
             // Funzione per gestire l'invio della risposta
             function inviaRisposta() {
@@ -96,21 +116,33 @@
                 callback(risposta);
             }
 
-            // Assegna l'evento al clic del pulsante
-            submitButton.onclick = inviaRisposta;
+            // Assegna l'evento al clic del pulsante di invio
+            if (submitButton) {
+                submitButton.onclick = inviaRisposta;
 
-            // Assegna l'evento al tasto "Enter"
-            rispostaInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    inviaRisposta();
-                }
-            });
+                // Assegna l'evento al tasto "Enter"
+                rispostaInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        inviaRisposta();
+                    }
+                });
+            }
+
+            // Gestisci il pulsante di ricominciare
+            if (restartButton) {
+                restartButton.onclick = function() {
+                    // Ripristina l'introduzione
+                    introDiv.style.display = 'block'; // Mostra di nuovo l'introduzione
+                    gameArea.style.display = 'none'; // Nascondi l'area di gioco
+                    body.style.backgroundImage = "url('sfondogioco.jpeg')"; // Ripristina l'immagine iniziale
+                };
+            }
         }
 
         // Prima scelta
         function primaScelta(risposta) {
             if (risposta === "si") {
-                mostraMessaggio("Benvenuti nella casa!<br><br>Appena entrati il vostro amico fattone Devid, vi invita ad andare a fumare con lui fuori. Andate?", secondaScelta);
+                mostraMessaggio("Benvenuti nella casa!<br><br>Appena entrati un vostro amico, vi invita ad andare a fumare con lui fuori. Andate?", secondaScelta);
             } else {
                 mostraMessaggio("Peccato! La tua avventura termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
             }
@@ -157,6 +189,5 @@
     </script>
 </body>
 </html>
-
 
 
