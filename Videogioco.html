@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco di Halloween</title>
+    <style>
+        h1 {
+            color: #FF8000;
+            font-family: 'Arial', sans-serif;
+            font-family: 'Algerian', sans-serif;
+        }
+        body {
+            font-weight: 700;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 20px;
+            background-image: url("sfondogioco.jpeg");
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        input {
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Benvenuto nel Gioco di Halloween!</h1>
+    <button id="startButton">Inizia il Gioco</button>
+    <div id="gameArea" style="display:none;"></div>
+
+    <!-- Elemento audio per il suono di sottofondo senza controls e con autoplay -->
+    <audio id="introSound" src="suonogioco1.mp3" type="audio/mp3" autoplay preload="auto">
+        <source src="suonogioco1.mp3" type="audio/mp3">
+        <source src="suonogioco2.ogg" type="audio/ogg">
+        Il browser non supporta il tag audio.
+    </audio>
+
+    <script>
+        const gameArea = document.getElementById('gameArea');
+        const introSound = document.getElementById('introSound');
+        const body = document.body; // Seleziona il body per modificare lo sfondo
+
+        // Funzione per iniziare il gioco
+        function inizioGioco() {
+            introSound.play().catch(error => {
+                console.error("Errore nella riproduzione dell'audio:", error);
+                alert("La riproduzione dell'audio è stata bloccata dal browser. Clicca per riprodurre il suono.");
+            });
+            gameArea.innerHTML = '';
+            gameArea.style.display = 'block';
+            mostraMessaggio("Ciao,<br>benvenuto/a nel mio primo gioco.<br><br>La regola è solo una, per poter proseguire bisogna rispondere 'si' o 'no' ad ogni domanda.<br><br>L'obiettivo è riuscire a sopravvivere alla notte di Halloween!<br><br>Tu e la vostra ragazza/o, siete stati invitati a passare la notte di Halloween insieme ai vostri amici in una casa nel bosco di un vostro amico.<br><br>Partecipate?", primaScelta);
+        }
+
+        // Funzione per mostrare messaggi e domande, con possibilità di cambiare lo sfondo temporaneamente
+        function mostraMessaggio(messaggio, callback, sfondoTemporaneo = null, sfondoGameOver = null) {
+            let contenuto = `<p>${messaggio}</p><input type="text" id="risposta" placeholder="Rispondi qui..."><button id="submitButton">Invia</button>`;
+
+            gameArea.innerHTML = contenuto;
+
+            // Cambia lo sfondo se è specificato uno sfondo temporaneo
+            if (sfondoTemporaneo) {
+                body.style.backgroundImage = `url('${sfondoTemporaneo}')`;
+            } else if (sfondoGameOver) {
+                // Cambia lo sfondo se è specificato uno sfondo di game over
+                body.style.backgroundImage = `url('${sfondoGameOver}')`;
+            } else {
+                // Ripristina lo sfondo originale
+                body.style.backgroundImage = "url('sfondogioco.jpeg')";
+            }
+
+            const rispostaInput = document.getElementById('risposta');
+            const submitButton = document.getElementById('submitButton');
+
+            // Funzione per gestire l'invio della risposta
+            function inviaRisposta() {
+                const risposta = rispostaInput.value.toLowerCase();
+                callback(risposta);
+            }
+
+            // Assegna l'evento al clic del pulsante
+            submitButton.onclick = inviaRisposta;
+
+            // Assegna l'evento al tasto "Enter"
+            rispostaInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    inviaRisposta();
+                }
+            });
+        }
+
+        // Prima scelta
+        function primaScelta(risposta) {
+            if (risposta === "si") {
+                mostraMessaggio("Benvenuti nella casa!<br><br>Appena entrati il vostro amico fattone Devid, vi invita ad andare a fumare con lui fuori. Andate?", secondaScelta);
+            } else {
+                mostraMessaggio("Peccato! La tua avventura termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
+            }
+        }
+
+        // Seconda scelta con sfondo temporaneo
+        function secondaScelta(risposta) {
+            if (risposta === "si") {
+                mostraMessaggio(
+                    "Avete fatto la scelta giusta, una cannetta ad Halloween ci sta!<br><br>Mentre fumate tranquillamente, sentite dei strani rumori provenire dal capanno del vostro amico Andrea, andate a vedere?",
+                    terzaScelta,
+                    "sfondoRagazzi.png"  // Sfondo temporaneo specificato qui
+                );
+            } else {
+                mostraMessaggio("Siete noiosi, la vostra serata termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
+            }
+        }
+
+        // Terza scelta
+        function terzaScelta(risposta) {
+            if (risposta === "si") {
+                mostraMessaggio("Aprite e vedete un'enorme pantegana che corre all'impazzata.<br><br>Decidete di rientrare in casa per mangiare tutti insieme.<br>............<br>Dopo cena, vi spostate in salotto e un vostro amico racconta storie di paura. Il/la vostro/a ragazzo/a si spaventa e chiede di smettere e fare un gioco da tavolo.<br><br>Martina, la padrona di casa, chiede il vostro aiuto per trovare un gioco adatto a tutti. Andate ad aiutarla?", quartaScelta);
+            } else {
+                mostraMessaggio("Sul serio non siete un po' curiosi? La vostra avventura termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
+            }
+        }
+
+        // Quarta scelta
+        function quartaScelta(risposta) {
+            if (risposta === "si") {
+                mostraMessaggio("Mentre andate ad aiutare Martina, notate una porta chiusa con un lucchetto. Vi chiedete cosa ci sia dietro...", conclusione);
+            } else {
+                mostraMessaggio("Rimanete in salotto con gli altri, e Martina va da sola...<br>La vostra avventura si conclude qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
+            }
+        }
+
+        // Conclusione
+        function conclusione() {
+            mostraMessaggio("Grazie per aver giocato! La storia continua...");
+        }
+
+        // Avvia il gioco al clic del pulsante
+        document.getElementById('startButton').onclick = inizioGioco;
+    </script>
+</body>
+</html>
+
+
+

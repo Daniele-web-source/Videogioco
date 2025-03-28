@@ -1,0 +1,85 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HalloweenGame : MonoBehaviour
+{
+    public Text gameText;
+    public InputField playerInput;
+    public Button submitButton;
+    public AudioSource introSound;
+    public Image background;
+
+    private int gameState = 0; // Per gestire gli stati del gioco
+
+    void Start()
+    {
+        introSound.Play();
+        DisplayMessage("Ciao, benvenuto/a nel mio gioco di Halloween! Rispondi 'si' o 'no' per proseguire. Partecipate?");
+        submitButton.onClick.AddListener(HandleInput);
+    }
+
+    void DisplayMessage(string message)
+    {
+        gameText.text = message;
+        playerInput.text = ""; // Pulisce l'input
+    }
+
+    void HandleInput()
+    {
+        string risposta = playerInput.text.ToLower();
+
+        switch (gameState)
+        {
+            case 0: // Prima scelta
+                if (risposta == "si")
+                {
+                    gameState = 1;
+                    DisplayMessage("Benvenuti nella casa! Andate fuori a fumare con Devid?");
+                }
+                else
+                {
+                    DisplayMessage("Peccato! La tua avventura termina qui.");
+                }
+                break;
+
+            case 1: // Seconda scelta
+                if (risposta == "si")
+                {
+                    gameState = 2;
+                    DisplayMessage("Sentite strani rumori nel capanno. Andate a vedere?");
+                }
+                else
+                {
+                    DisplayMessage("Siete noiosi, la vostra serata termina qui.");
+                }
+                break;
+
+            case 2: // Terza scelta
+                if (risposta == "si")
+                {
+                    gameState = 3;
+                    DisplayMessage("Vedete una pantegana e rientrate per mangiare. Aiutate Martina a cercare un gioco da tavolo?");
+                }
+                else
+                {
+                    DisplayMessage("Sul serio non siete curiosi? La vostra avventura termina qui.");
+                }
+                break;
+
+            case 3: // Quarta scelta
+                if (risposta == "si")
+                {
+                    DisplayMessage("Notate una porta chiusa con un lucchetto. La storia continua...");
+                }
+                else
+                {
+                    DisplayMessage("Rimanete in salotto. La vostra avventura si conclude qui.");
+                }
+                break;
+
+            default:
+                DisplayMessage("Grazie per aver giocato!");
+                break;
+        }
+    }
+}
