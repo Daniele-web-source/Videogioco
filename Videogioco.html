@@ -152,19 +152,19 @@
         function secondaScelta(risposta) {
             if (risposta === "si") {
                 mostraMessaggio(
-                    "Avete fatto la scelta giusta, una cannetta ad Halloween ci sta!<br><br>Mentre fumate tranquillamente, sentite dei strani rumori provenire dal capanno del vostro amico Andrea, andate a vedere?",
+                    "<br>Mentre siete fuori a fumare, improvvisamente sentite dei strani rumori provenire dal capanno del vostro amico Andrea, andate a vedere?",
                     terzaScelta,
-                    "sfondoRagazzi.png"  // Sfondo temporaneo specificato qui
+                    "sfondoRagazzi.png"  
                 );
             } else {
-                mostraMessaggio("Siete noiosi, la vostra serata termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
+                mostraMessaggio("Peccato, la vostra serata termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
             }
         }
 
         // Terza scelta
         function terzaScelta(risposta) {
             if (risposta === "si") {
-                mostraMessaggio("Aprite e vedete un'enorme pantegana che corre all'impazzata.<br><br>Decidete di rientrare in casa per mangiare tutti insieme.<br>............<br>Dopo cena, vi spostate in salotto e un vostro amico racconta storie di paura. Il/la vostro/a ragazzo/a si spaventa e chiede di smettere e fare un gioco da tavolo.<br><br>Martina, la padrona di casa, chiede il vostro aiuto per trovare un gioco adatto a tutti. Andate ad aiutarla?", quartaScelta);
+                mostraMessaggio("Aprite e vedete un'enorme topo che scappa via dopo aver fatto cadere degli attrezzi.<br><br>Dopo lo spavento, decidete di rientrare in casa per mangiare tutti insieme.<br>............<br>Dopo cena, vi spostate in salotto e un vostro amico comincia a raccontare storie di paura. Il vostro partner si spaventa e chiede di smettere e di fare un gioco da tavolo.<br><br>Martina, la padrona di casa, chiede il vostro aiuto per trovare un gioco adatto a tutti. Andate ad aiutarla?", quartaScelta);
             } else {
                 mostraMessaggio("Sul serio non siete un po' curiosi? La vostra avventura termina qui.", null, null, "gameover.jpg"); // Aggiungi qui l'immagine di game over
             }
