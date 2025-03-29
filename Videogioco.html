@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gioco di Halloween</title>
     <style>
-        h1 {
+         h1 {
             color: #FF8000;
             font-family: 'Arial', sans-serif;
             font-family: 'Algerian', sans-serif;
@@ -25,20 +25,36 @@
         }
         button {
             margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 18px;
             background-color: #333;
             color: #fff;
             border: none;
             cursor: pointer;
+            width: 80%;
+            max-width: 300px;
         }
         button:hover {
             background-color: #555;
         }
         input {
-            padding: 10px;
+            padding: 12px;
             margin-top: 10px;
-            font-size: 16px;
+            font-size: 18px;
+            width: 80%;
+            max-width: 300px;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 22px;
+            }
+            button, input {
+                font-size: 16px;
+                padding: 10px;
+            }
+            body {
+                padding: 10px;
+            }
         }
     </style>
 </head>
